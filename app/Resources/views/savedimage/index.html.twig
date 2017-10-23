@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{% block title %}saved-images{% endblock %}
+{% block body %}
+    <h1>Savedimages list</h1>
+
+    <div class="form-group col-xs-6">
+
+        <div class="inner-addon right-addon">
+            <i class="glyphicon glyphicon-search"></i>
+            <input id="myInput" onkeyup="search()" type="text" class="form-control" placeholder="Search For names" />
+        </div>
+    </div>
+
+    <table id="myTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th> Creation Date</th>
+                <th>Preview</th>
+                <th>Original image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for savedImage in savedImages %}
+            <tr>
+                <td>{{ savedImage.name }}</td>
+                <td>{% if savedImage.updatedAt %}{{ savedImage.updatedAt|date('Y-m-d') }}{% endif %}</td>
+                <td><img src='{{ asset('uploads/images/saved-images/') }}{{ savedImage.filename }}'  style="width: 30px;height: 30px;"></td>
+
+
+                <td><img src='{{savedImage.originalImage.deeplink}}'  style="width: 30px;height: 30px;"></td>
+
+                <td>
+                <a href="{{ path('savedimage_show', { 'id': savedImage.id }) }}"  class="glyphicon glyphicon-move"></a>
+                <a href="{{ path('savedimage_edit', { 'id': savedImage.id }) }}"class="glyphicon glyphicon-edit"></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul type="none">
+        <li>
+            <a class="btn btn-primary" href="{{ path('savedimage_new') }}"><span class="glyphicon glyphicon-plus-sign"></span> Add  </a>
+        </li>
+    </ul>
+    {% block javascripts %}
+        <script src="{{ asset('public/js/index.js') }}"></script>
+    {% endblock %}
+{% endblock %}
